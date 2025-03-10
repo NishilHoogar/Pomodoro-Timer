@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+        .cozy-bg {
+            background-image: url('assets/cozy-library-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        /* Overlay to add warmth to the background */
+        .cozy-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(255, 200, 150, 0.1),
+                    rgba(255, 150, 100, 0.1));
+            pointer-events: none;
+        }
+
+        .balloon {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 80px;
+            height: auto;
+        }
+
+        .balloon:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.2);
+        }
+
+        .balloon.selected {
+            filter: drop-shadow(0 0 15px rgba(255, 220, 180, 0.9));
+            transform: translateY(-5px);
+        }
+
+        /* Timer container styling to match design */
+        .timer-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 4px;
+        }
+
+        .digit {
+            background: #f8f8f8;
+            border-radius: 4px;
+            width: 60px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .digit.pink {
+            background: #E4A6AA;
+        }
+
+        .digit.gray {
+            background: #666666;
+        }
+
+        /* Completion message styling */
+        .completion-message {
+            font-family: 'Indie Flower', cursive;
+            color: #E4A6AA;
+            font-size: 3rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .cozy-stop-btn {
+            background: #E4A6AA;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .cozy-stop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden">
+    <div class="cozy-bg h-full w-full relative">
+        <!-- Start Screen -->
+        <div id="start-screen" class="h-full w-full flex items-center justify-center">
+            <div class="relative w-full h-full">
+                <!-- Balloons -->
+                <img src="assets/balloon-5.png" class="balloon absolute left-[10%] top-[30%] w-24" data-minutes="1">
+                <img src="assets/balloon-10.png" class="balloon absolute left-[25%] top-[25%] w-24" data-minutes="10">
+                <img src="assets/balloon-15.png" class="balloon absolute left-[40%] top-[20%] w-24" data-minutes="15">
+                <img src="assets/balloon-25.png" class="balloon absolute right-[20%] top-[15%] w-24" data-minutes="25">
+
+                <!-- Start Button -->
+                <button id="start-btn" class="absolute right-8 bottom-7">
+                    <img src="assets/start-sign.png" class="w-32 hover:scale-105 transition-transform">
+                </button>
+            </div>
+        </div>
+
+        <!-- Timer Screen -->
+        <div id="timer-screen" class="hidden h-full w-full flex items-center justify-center">
+            <button id="stop-btn" class="absolute left-1 bottom-11 transform -translate-y-1/2">
+                <img src="assets/stop-sign.png" class="w-24 hover:scale-105 transition-transform">
+            </button>
+
+            <div class="timer-container">
+                <div id="minutes-tens" class="digit pink">0</div>
+                <div id="minutes-ones" class="digit pink">0</div>
+                <div id="seconds-tens" class="digit gray">0</div>
+                <div id="seconds-ones" class="digit gray">0</div>
+            </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div id="completion-screen" class="hidden h-full w-full flex flex-col items-center justify-center">
+            <div class="completion-message">You have earned a break!</div>
+            <button id="completion-stop-btn" class="cozy-stop-btn">
+                Stop Music
+            </button>
+        </div>
+    </div>
+    <audio id="timer-complete" src="assets/timer-complete.mp3"></audio>
+    <script src="app.js"></script>
+</body>
+
+</html>
