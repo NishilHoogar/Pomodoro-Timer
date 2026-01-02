@@ -10,24 +10,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
         .cozy-bg {
-            background-image: url('assets/background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(180deg, #FFF0F5 0%, #E6E6FA 50%, #E0F7FA 100%);
             min-height: 100vh;
-        }
-
-        /* Overlay to add warmth to the background */
-        .cozy-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(rgba(255, 200, 150, 0.1),
-                    rgba(255, 150, 100, 0.1));
-            pointer-events: none;
         }
 
         .balloon {
@@ -46,6 +30,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
             position: relative;
+            animation: float 4s ease-in-out infinite;
         }
 
         /* Balloon string */
@@ -106,7 +91,7 @@
         /* Completion message styling */
         .completion-message {
             font-family: 'Indie Flower', cursive;
-            color: #c4f2f3;
+            color: #4A4E69;
             font-size: 3rem;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -203,6 +188,11 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes float {
+            0%, 100% { margin-top: 0; }
+            50% { margin-top: -15px; }
+        }
     </style>
 </head>
 
@@ -212,10 +202,10 @@
         <div id="start-screen" class="h-full w-full flex items-center justify-center">
             <div class="relative w-full h-full">
                 <!-- CSS Balloons -->
-                <div class="balloon absolute left-[15%] top-[20%] bg-[#FFD700]" data-minutes="5" role="button" tabindex="0">5m</div>
-                <div class="balloon absolute left-[35%] top-[12%] bg-[#FF6B6B]" data-minutes="10" role="button" tabindex="0">10m</div>
-                <div class="balloon absolute left-[55%] top-[12%] bg-[#4ECDC4]" data-minutes="15" role="button" tabindex="0">15m</div>
-                <div class="balloon absolute left-[75%] top-[20%] bg-[#45B7D1]" data-minutes="25" role="button" tabindex="0">25m</div>
+                <div class="balloon absolute left-[15%] top-[20%] bg-[#FFD700]" style="animation-delay: 0s;" data-minutes="5" role="button" tabindex="0">5m</div>
+                <div class="balloon absolute left-[35%] top-[12%] bg-[#FF6B6B]" style="animation-delay: 1s;" data-minutes="10" role="button" tabindex="0">10m</div>
+                <div class="balloon absolute left-[55%] top-[12%] bg-[#4ECDC4]" style="animation-delay: 2s;" data-minutes="15" role="button" tabindex="0">15m</div>
+                <div class="balloon absolute left-[75%] top-[20%] bg-[#45B7D1]" style="animation-delay: 0.5s;" data-minutes="25" role="button" tabindex="0">25m</div>
 
                 <!-- Custom Time Input -->
                 <div class="absolute top-[60%] left-1/2 transform -translate-x-1/2 custom-input-wrapper">
