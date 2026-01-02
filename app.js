@@ -12,6 +12,9 @@ class PomodoroTimer {
         this.startBtn = document.getElementById('start-btn');
         this.stopBtn = document.getElementById('stop-btn');
         this.completionStopBtn = document.getElementById('completion-stop-btn');
+        this.repeatBtn = document.getElementById('repeat-btn');
+        this.customMinutesInput = document.getElementById('custom-minutes');
+        this.customSecondsInput = document.getElementById('custom-seconds');
         this.balloons = document.querySelectorAll('.balloon');
         this.timerCompleteSound = document.getElementById('timer-complete');
 
@@ -24,6 +27,9 @@ class PomodoroTimer {
                 this.selectBalloon(balloon);
             });
         });
+
+        this.customMinutesInput.addEventListener('input', () => this.handleCustomInput());
+        this.customSecondsInput.addEventListener('input', () => this.handleCustomInput());
 
         this.startBtn.addEventListener('click', () => {
             if (this.selectedTime) {
@@ -41,25 +47,46 @@ class PomodoroTimer {
             this.completionScreen.classList.add('hidden');
             this.startScreen.classList.remove('hidden');
         });
+
+        this.repeatBtn.addEventListener('click', () => {
+            this.timerCompleteSound.pause();
+            this.timerCompleteSound.currentTime = 0;
+            this.completionScreen.classList.add('hidden');
+            this.startTimer();
+        });
     }
 
     selectBalloon(balloon) {
         this.balloons.forEach(b => b.classList.remove('selected'));
         balloon.classList.add('selected');
-        this.selectedTime = parseInt(balloon.dataset.minutes);
+        this.customMinutesInput.value = '';
+        this.customSecondsInput.value = '';
+        this.selectedTime = parseInt(balloon.dataset.minutes) * 60; // Convert minutes to seconds
+    }
+
+    handleCustomInput() {
+        const mins = parseInt(this.customMinutesInput.value) || 0;
+        const secs = parseInt(this.customSecondsInput.value) || 0;
+        
+        if (mins > 0 || secs > 0) {
+            this.balloons.forEach(b => b.classList.remove('selected'));
+            this.selectedTime = (mins * 60) + secs;
+        }
     }
 
     startTimer() {
-        this.timeRemaining = this.selectedTime * 60;
+        this.timeRemaining = this.selectedTime;
         this.startScreen.classList.add('hidden');
         this.timerScreen.classList.remove('hidden');
 
         this.isRunning = true;
-        const initialMinutes = this.selectedTime;
-        document.getElementById('minutes-tens').textContent = Math.floor(initialMinutes / 10);
-        document.getElementById('minutes-ones').textContent = initialMinutes % 10;
-        document.getElementById('seconds-tens').textContent = '0';
-        document.getElementById('seconds-ones').textContent = '0';
+        
+        const minutes = Math.floor(this.selectedTime / 60);
+        const seconds = this.selectedTime % 60;
+        document.getElementById('minutes-tens').textContent = Math.floor(minutes / 10);
+        document.getElementById('minutes-ones').textContent = minutes % 10;
+        document.getElementById('seconds-tens').textContent = Math.floor(seconds / 10);
+        document.getElementById('seconds-ones').textContent = seconds % 10;
 
         this.timerInterval = setInterval(() => {
             this.timeRemaining--;

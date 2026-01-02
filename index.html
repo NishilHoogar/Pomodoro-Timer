@@ -31,20 +31,44 @@
         }
 
         .balloon {
+            /* Base balloon styles */
             transition: all 0.3s ease;
             cursor: pointer;
-            width: 80px;
-            height: auto;
+            width: 90px;
+            height: 110px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Indie Flower', cursive;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Balloon string */
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 25px;
+            background: rgba(0,0,0,0.3);
         }
 
         .balloon:hover {
-            transform: translateY(-5px);
-            filter: brightness(1.2);
+            transform: translateY(-10px);
+            filter: brightness(1.1);
         }
 
         .balloon.selected {
-            filter: drop-shadow(0 0 15px rgba(255, 220, 180, 0.9));
-            transform: translateY(-5px);
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), inset -5px -5px 10px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.8);
         }
 
         /* Timer container styling to match design */
@@ -106,6 +130,68 @@
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
+        /* Custom Time Input */
+        .custom-time-input {
+            font-family: 'Indie Flower', cursive;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #E4A6AA;
+            border-radius: 12px;
+            padding: 0.5rem;
+            font-size: 1.5rem;
+            width: 70px;
+            text-align: center;
+        }
+
+        /* Hand-drawn Button Styles */
+        .hand-drawn-btn {
+            font-family: 'Indie Flower', cursive;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .hand-drawn-btn:hover {
+            transform: scale(1.05) rotate(-1deg);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .start-btn-style {
+            background: #98D8AA; /* Pastel Green */
+            color: white;
+            font-size: 2.5rem;
+            padding: 0.5rem 3rem;
+            /* Organic border radius for hand-drawn look */
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            transform: rotate(-2deg);
+        }
+
+        .stop-sign-style {
+            background: #FF6B6B; /* Pastel Red */
+            color: white;
+            font-size: 1.8rem;
+            width: 100px;
+            height: 100px;
+            /* Organic octagon-ish shape */
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #FF6B6B, 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .custom-input-wrapper {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 1.5rem;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            border: 2px dashed #B39CD0; /* Pastel Purple */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -125,23 +211,39 @@
         <!-- Start Screen -->
         <div id="start-screen" class="h-full w-full flex items-center justify-center">
             <div class="relative w-full h-full">
-                <!-- Balloons -->
-                <img src="assets/ballon-5.jpg" class="balloon absolute left-[10%] top-[30%] w-24" data-minutes="1">
-                <img src="assets/ballon-10.avif" class="balloon absolute left-[25%] top-[25%] w-24" data-minutes="10">
-                <img src="assets/ballon-15.avif" class="balloon absolute left-[40%] top-[20%] w-24" data-minutes="15">
-                <img src="assets/ballon-25.jpeg" class="balloon absolute right-[20%] top-[15%] w-24" data-minutes="25">
+                <!-- CSS Balloons -->
+                <div class="balloon absolute left-[15%] top-[20%] bg-[#FFD700]" data-minutes="5" role="button" tabindex="0">5m</div>
+                <div class="balloon absolute left-[35%] top-[12%] bg-[#FF6B6B]" data-minutes="10" role="button" tabindex="0">10m</div>
+                <div class="balloon absolute left-[55%] top-[12%] bg-[#4ECDC4]" data-minutes="15" role="button" tabindex="0">15m</div>
+                <div class="balloon absolute left-[75%] top-[20%] bg-[#45B7D1]" data-minutes="25" role="button" tabindex="0">25m</div>
+
+                <!-- Custom Time Input -->
+                <div class="absolute top-[60%] left-1/2 transform -translate-x-1/2 custom-input-wrapper">
+                    <label class="font-['Indie_Flower'] text-2xl mb-2 text-[#B39CD0] font-bold">Custom Time</label>
+                    <div class="flex gap-2 items-center">
+                        <div class="flex flex-col items-center">
+                            <input type="number" id="custom-minutes" class="custom-time-input border-[#B39CD0]" min="0" max="120" placeholder="0">
+                            <span class="font-['Indie_Flower'] text-sm text-gray-500">min</span>
+                        </div>
+                        <span class="font-['Indie_Flower'] text-2xl text-[#B39CD0] font-bold">:</span>
+                        <div class="flex flex-col items-center">
+                            <input type="number" id="custom-seconds" class="custom-time-input border-[#B39CD0]" min="0" max="59" placeholder="00">
+                            <span class="font-['Indie_Flower'] text-sm text-gray-500">sec</span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Start Button -->
-                <button id="start-btn" class="absolute right-8 bottom-7">
-                    <img src="assets/start-sign.png" class="w-32 hover:scale-105 transition-transform">
+                <button id="start-btn" class="absolute right-8 bottom-7 hand-drawn-btn start-btn-style" aria-label="Start Timer">
+                    START
                 </button>
             </div>
         </div>
 
         <!-- Timer Screen -->
         <div id="timer-screen" class="hidden h-full w-full flex items-center justify-center">
-            <button id="stop-btn" class="absolute left-1 bottom-11 transform -translate-y-1/2">
-                <img src="assets/stop-sign.png" class="w-24 hover:scale-105 transition-transform">
+            <button id="stop-btn" class="absolute left-8 bottom-8 hand-drawn-btn stop-sign-style" aria-label="Stop Timer">
+                STOP
             </button>
 
             <div class="timer-container">
@@ -155,9 +257,14 @@
         <!-- Completion Screen -->
         <div id="completion-screen" class="hidden h-full w-full flex flex-col items-center justify-center">
             <div class="completion-message">You have earned a break!</div>
-            <button id="completion-stop-btn" class="cozy-stop-btn">
-                Stop Music
-            </button>
+            <div class="flex gap-4">
+                <button id="completion-stop-btn" class="cozy-stop-btn">
+                    Stop
+                </button>
+                <button id="repeat-btn" class="cozy-stop-btn bg-[#4ECDC4]">
+                    Repeat
+                </button>
+            </div>
         </div>
     </div>
     <audio id="timer-complete" src="assets/bg-music.mp3"></audio>
